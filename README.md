@@ -22,7 +22,8 @@ The main contributions are:
 - **Selection-aware tuning procedures:** The thesis introduces new full-sample and on-folds tuning strategies that consistently incorporate estimated selection probabilities into the tuning of treatment and outcome models.  
   *This change is implemented directly in the tuning methods of the DoubleML package's `ssm.py`. Therefore, you must use the `ssm.py` script provided in this repository to ensure correct functionality.*
 
-![Selection-Aware Tuning Diagram](../img/img/spl_method_dml_ssm.png.png)
+![spl_method_dml_ssm drawio (1)](https://github.com/user-attachments/assets/3928654c-ea96-4a9c-bf44-67087fb493e0)
+
 
 - **Comprehensive simulation study:** The thesis provides an extensive simulation-based evaluation of different machine learning methods (Lasso, Random Forest, XGBoost) for nuisance function estimation in DML-SSM. The impact of tuning, model choice, and DGP complexity on ATE estimation is analyzed for MNAR scenario, with results benchmarked against oracle models.
 
