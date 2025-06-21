@@ -24,7 +24,6 @@ The main contributions are:
 
 ![spl_method_dml_ssm drawio (1)](https://github.com/user-attachments/assets/3928654c-ea96-4a9c-bf44-67087fb493e0)
 
-
 - **Comprehensive simulation study:** The thesis provides an extensive simulation-based evaluation of different machine learning methods (Lasso, Random Forest, XGBoost) for nuisance function estimation in DML-SSM. The impact of tuning, model choice, and DGP complexity on ATE estimation is analyzed for MNAR scenario, with results benchmarked against oracle models.
 
 The codebase includes all simulation and analysis tools used in the thesis.
@@ -38,31 +37,43 @@ The codebase includes all simulation and analysis tools used in the thesis.
 ├── README.md
 ├── requirements.txt
 ├── src/
-│   ├── analysis/             # Analysis notebooks and scripts
-│   │   ├── analysis.ipynb    # Main analysis notebook
-│   │   ├── results_fs/       # Results for full-sample tuning
-│   │   ├── results_of/       # Results for on-folds tuning
-│   ├── simulations/          # Main simulation code and utilities
-│   │   ├── DGP_functions.py  # Data generating processes
-│   │   ├── helpers.py        # Helper functions
-│   │   ├── main.py           # Main simulation entry point
-│   │   ├── oracle_functions.py # Oracle-related functions
-│   ├── ssm.py                # Custom DoubleML SSM implementation
-├── img/                      # Images and diagrams
-└── ...                       # Other files and folders
+│   ├── analysis_selection_aware_tuning/ # Selection-aware vs Default Tuning analysis
+│   │   ├── lasso_results/               # Results and analysis for Lasso model
+│   │   ├── rf_results/                  # Results analysis for Random Forest model
+│   │   ├── xgb_results/                 # Results analysis for XGBoost model
+│   ├── analysis_study_comparison/       # Comparative study analysis of Full Sample and On Folds across ML Models
+│   │   ├── results_fs/                  # Results and analysis for full-sample tuning
+│   │   ├── results_of/                  # Results and analysis for on-folds tuning
+│   │   ├── analysis.ipynb               # Main analysis notebook
+│   ├── real_life_study/                 # Real-life study analysis
+│   │   ├── data/                        # Data files for real-life study
+│   │   ├── real_life_study_academic.ipynb # Academic study notebook
+│   │   ├── real_life_study_analysis_academic.ipynb # Analysis for academic study
+│   │   ├── real_life_study_analysis_vocational.ipynb # Analysis for vocational study
+│   │   ├── real_life_study_vocational.ipynb # Vocational study notebook
+│   ├── simulations/                     # Main simulation code and utilities
+│   │   ├── DGP_functions.py             # Data generating processes
+│   │   ├── helpers.py                   # Helper functions
+│   │   ├── main.py                      # Main simulation entry point
+│   │   ├── oracle_functions.py          # Oracle-related functions
+│   ├── ssm.py                           # Custom DoubleML SSM implementation
+├── img/                                 # Images and diagrams
+└── ...                                  # Other files and folders
 ```
 
 ---
 
 ## How to Run
 
-1. **Install requirements**
+### 1. Install Requirements
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+To run any part of this repository, first install the required Python packages:
 
-2. **Patch DoubleML for SSM**
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Patch DoubleML for SSM
 
    This repository provides a custom `ssm.py` file in `src/ssm.py`.  
    You must manually overwrite the DoubleML package's own `ssm.py` with this file:
@@ -70,24 +81,28 @@ The codebase includes all simulation and analysis tools used in the thesis.
    ```bash
    cp src/ssm.py <your_python_env>/lib/pythonX.X/site-packages/doubleml/irm/ssm.py
    ```
-   
+
    - This step is required for selection-aware tuning to work as described in the thesis.
 
-3. **Run the MPI Simulation**
+### 3. Simulations (Main Study)
+
+The simulations directory contains the main code for running experiments and simulations. Follow these steps:
+
+**Run the MPI Simulation**
 
    Use the following command format:
 
    ```bash
-   mpirun -np <num_processes> python main.py --mar <True/False> --oracle <True/False> --dgp_num <int> --tuning_method <full_sample/split_sample/on_folds> --tune <True/False> --ml_models <model1> <model2> ... --n_sim <num_simulations> --n_obs <num_observations>
+   mpirun -np <num_processes> python src/simulations/main.py --mar <True/False> --oracle <True/False> --dgp_num <int> --tuning_method <full_sample/split_sample/on_folds> --tune <True/False> --ml_models <model1> <model2> ... --n_sim <num_simulations> --n_obs <num_observations>
    ```
 
    **Example:**
 
    ```bash
-   mpirun -np 4 python main.py --mar True --oracle False --dgp_num 1 --tuning_method full_sample --tune True --ml_models lasso regression xgb rf --n_sim 100 --n_obs 2000
+   mpirun -np 4 python src/simulations/main.py --mar False --oracle False --dgp_num 1 --tuning_method full_sample --tune True --ml_models lasso xgb --n_sim 100 --n_obs 2000
    ```
 
-### Explanation of Parameters
+**Explanation of Parameters**
 
 | Argument           | Description                                                                 | Example                                 |
 |--------------------|-----------------------------------------------------------------------------|-----------------------------------------|
@@ -101,11 +116,23 @@ The codebase includes all simulation and analysis tools used in the thesis.
 | `--n_sim`          | Number of simulations to run for each model                                 | `--n_sim 200`                           |
 | `--n_obs`          | Number of observations per simulation                                       | `--n_obs 3000`                          |
 
----
+   - Logging is automatically handled, and a log file (`simulation.log`) is created to track progress and duration.
 
-## Logging
+### 3. Analysis Selection-Aware Tuning
 
-It creates a log file (`simulation.log`) that shows the progress of each task, total duration, etc.
+This directory contains pre-produced CSV files comparing default tuning and selection-aware tuning using both default and custom `ssm.py`. The comparison is performed across three models: Random Forest (RF), Lasso, and XGBoost (XGB).
+
+1. Navigate to `src/analysis_selection_aware_tuning/`.
+2. Each machine learning model has its own subdirectory (`lasso_results/`, `rf_results/`, `xgb_results/`) containing precomputed results.
+3. Within each subdirectory, you will find a notebook analyzing the results and CSV files that can be used for further study.
+
+### 4. Analysis Study Comparison
+
+This directory evaluates full-sample and on-folds tuning methods using custom `ssm.py` across different machine learning models.
+
+1. Navigate to `src/analysis_study_comparison/`.
+2. Open `analysis.ipynb` to explore the comparative study.
+3. Results and analysis notebooks for full-sample and on-folds tuning are stored in `results_fs/` and `results_of/` directories, respectively.
 
 ---
 

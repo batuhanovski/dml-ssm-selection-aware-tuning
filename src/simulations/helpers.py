@@ -51,7 +51,7 @@ def perform_DML(dml_data, ml_g, ml_m, ml_pi, mar, y_real, grid_g, grid_m, grid_p
 
     results = []
     if mar:
-        dml_ssm = dml.DoubleMLSSM(dml_data, ml_g, ml_m, ml_pi, score='missing-at-random')
+        dml_ssm = dml.DoubleMLSSM(obj_dml_data=dml_data, ml_g_d0 = ml_g, ml_g_d1 = ml_g, ml_m = ml_m, ml_pi = ml_pi, score='missing-at-random')
         if tune:
             dml_ssm.tune({"ml_g_d0": grid_g, "ml_g_d1": grid_g, "ml_m": grid_m, "ml_pi": grid_pi}, tune_on_folds=on_folds, set_as_params=True)
     else: 
