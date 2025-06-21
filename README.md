@@ -11,7 +11,11 @@ Special thanks to Prof. Tomasz Olma for his supervision and guidance throughout 
 - [Main Contributions](#main-contributions)
 - [Repository Structure](#repository-structure)
 - [How to Run](#how-to-run)
-- [Logging](#logging)
+  - [Install Requirements](#1-install-requirements)
+  - [Patch DoubleML for SSM](#2-patch-doubleml-for-ssm)
+  - [Simulations (Main Study)](#3-simulations-main-study)
+  - [Analysis Selection-Aware Tuning](#4-analysis-selection-aware-tuning)
+  - [Analysis Study Comparison](#5-analysis-study-comparison)
 - [Contact](#contact)
 
 ---
@@ -57,7 +61,6 @@ The codebase includes all simulation and analysis tools used in the thesis.
 │   │   ├── main.py                      # Main simulation entry point
 │   │   ├── oracle_functions.py          # Oracle-related functions
 │   ├── ssm.py                           # Custom DoubleML SSM implementation
-├── img/                                 # Images and diagrams
 └── ...                                  # Other files and folders
 ```
 
@@ -79,7 +82,7 @@ pip install -r requirements.txt
    You must manually overwrite the DoubleML package's own `ssm.py` with this file:
 
    ```bash
-   cp src/ssm.py <your_python_env>/lib/pythonX.X/site-packages/doubleml/irm/ssm.py
+   cp src/custom_ssm.py <your_python_env>/lib/pythonX.X/site-packages/doubleml/irm/ssm.py
    ```
 
    - This step is required for selection-aware tuning to work as described in the thesis.
@@ -118,7 +121,7 @@ The simulations directory contains the main code for running experiments and sim
 
    - Logging is automatically handled, and a log file (`simulation.log`) is created to track progress and duration.
 
-### 3. Analysis Selection-Aware Tuning
+### 4. Analysis Selection-Aware Tuning
 
 This directory contains pre-produced CSV files comparing default tuning and selection-aware tuning using both default and custom `ssm.py`. The comparison is performed across three models: Random Forest (RF), Lasso, and XGBoost (XGB).
 
@@ -126,7 +129,7 @@ This directory contains pre-produced CSV files comparing default tuning and sele
 2. Each machine learning model has its own subdirectory (`lasso_results/`, `rf_results/`, `xgb_results/`) containing precomputed results.
 3. Within each subdirectory, you will find a notebook analyzing the results and CSV files that can be used for further study.
 
-### 4. Analysis Study Comparison
+### 5. Analysis Study Comparison
 
 This directory evaluates full-sample and on-folds tuning methods using custom `ssm.py` across different machine learning models.
 
