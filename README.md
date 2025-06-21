@@ -10,12 +10,14 @@ Special thanks to Prof. Tomasz Olma for his supervision and guidance throughout 
 
 - [Main Contributions](#main-contributions)
 - [Repository Structure](#repository-structure)
-- [How to Run](#how-to-run)
+- [Setup](#setup)
   - [Install Requirements](#1-install-requirements)
   - [Patch DoubleML for SSM](#2-patch-doubleml-for-ssm)
-  - [Simulations (Main Study)](#3-simulations-main-study)
-  - [Analysis Selection-Aware Tuning](#4-analysis-selection-aware-tuning)
-  - [Analysis Study Comparison](#5-analysis-study-comparison)
+- [How to Run](#how-to-run)
+  - [Simulations (Main Study)](#1-simulations-main-study)
+  - [Analysis Selection-Aware Tuning](#2-analysis-selection-aware-tuning)
+  - [Analysis Study Comparison](#3-analysis-study-comparison)
+  - [Real-Life Data Study](#4-real-life-data-study)
 - [Contact](#contact)
 
 ---
@@ -26,7 +28,11 @@ The main contributions are:
 - **Selection-aware tuning procedures:** The thesis introduces new full-sample and on-folds tuning strategies that consistently incorporate estimated selection probabilities into the tuning of treatment and outcome models.  
   *This change is implemented directly in the tuning methods of the DoubleML package's `ssm.py`. Therefore, you must use the `ssm.py` script provided in this repository to ensure correct functionality.*
 
-![spl_method_dml_ssm drawio (1)](https://github.com/user-attachments/assets/3928654c-ea96-4a9c-bf44-67087fb493e0)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3928654c-ea96-4a9c-bf44-67087fb493e0" alt="spl_method_dml_ssm" width="600"/>
+</p>
+
 
 - **Comprehensive simulation study:** The thesis provides an extensive simulation-based evaluation of different machine learning methods (Lasso, Random Forest, XGBoost) for nuisance function estimation in DML-SSM. The impact of tuning, model choice, and DGP complexity on ATE estimation is analyzed for MNAR scenario, with results benchmarked against oracle models.
 
@@ -66,11 +72,11 @@ The codebase includes all simulation and analysis tools used in the thesis.
 
 ---
 
-## How to Run
+## Setup
 
 ### 1. Install Requirements
 
-To run any part of this repository, first install the required Python packages:
+To run any part of this repository, first install the required Python packages. This repository has been tested with Python 3.11.8:
 
 ```bash
 pip install -r requirements.txt
@@ -87,7 +93,9 @@ pip install -r requirements.txt
 
    - This step is required for selection-aware tuning to work as described in the thesis.
 
-### 3. Simulations (Main Study)
+## How to Run
+
+### 1. Simulations (Main Study)
 
 The simulations directory contains the main code for running experiments and simulations. Follow these steps:
 
@@ -121,7 +129,7 @@ The simulations directory contains the main code for running experiments and sim
 
    - Logging is automatically handled, and a log file (`simulation.log`) is created to track progress and duration.
 
-### 4. Analysis Selection-Aware Tuning
+### 2. Analysis Selection-Aware Tuning
 
 This directory contains pre-produced CSV files comparing default tuning and selection-aware tuning using both default and custom `ssm.py`. The comparison is performed across three models: Random Forest (RF), Lasso, and XGBoost (XGB).
 
@@ -129,13 +137,29 @@ This directory contains pre-produced CSV files comparing default tuning and sele
 2. Each machine learning model has its own subdirectory (`lasso_results/`, `rf_results/`, `xgb_results/`) containing precomputed results.
 3. Within each subdirectory, you will find a notebook analyzing the results and CSV files that can be used for further study.
 
-### 5. Analysis Study Comparison
+### 3. Analysis Study Comparison
 
 This directory evaluates full-sample and on-folds tuning methods using custom `ssm.py` across different machine learning models.
 
 1. Navigate to `src/analysis_study_comparison/`.
 2. Open `analysis.ipynb` to explore the comparative study.
 3. Results and analysis notebooks for full-sample and on-folds tuning are stored in `results_fs/` and `results_of/` directories, respectively.
+
+### 4. Real Life Data Study
+
+The `real_life_study` directory contains Jupyter notebooks and data files for analyzing real-life scenarios. This study is divided into academic and vocational analyses.
+
+1. Navigate to `src/real_life_study/`.
+2. Data files required for the study are located in the `data/` subdirectory.
+3. Open the relevant notebooks:
+   - `real_life_study_academic.ipynb`: Academic study notebook.
+   - `real_life_study_vocational.ipynb`: Vocational study notebook.
+4. Additional analysis notebooks for academic and vocational studies are provided:
+   - `real_life_study_analysis_academic.ipynb`
+   - `real_life_study_analysis_vocational.ipynb`
+
+These notebooks explore real-life applications of the methods described in the thesis.  The study replicates Bia et al. (2024)'s work by performing hyperparameter tuning. For access to raw data, refer to their replication files. The analysis in this repository uses precomputed data (included) for further evaluation.
+
 
 ---
 
