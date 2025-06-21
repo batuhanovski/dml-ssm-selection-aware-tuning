@@ -534,10 +534,10 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
 
             # hyperparameter tuning for ML
             g_d0_tune_res = _dml_tune(y, x, train_inds_d0_s1,
-                                    self._learner['ml_g'], param_grids['ml_g'], scoring_methods['ml_g'],
+                                    self._learner['ml_g_d0'], param_grids['ml_g_d0'], scoring_methods['ml_g_d0'],
                                     n_folds_tune, n_jobs_cv, search_mode, n_iter_randomized_search)
             g_d1_tune_res = _dml_tune(y, x, train_inds_d1_s1,
-                                    self._learner['ml_g'], param_grids['ml_g'], scoring_methods['ml_g'],
+                                    self._learner['ml_g_d1'], param_grids['ml_g_d1'], scoring_methods['ml_g_d1'],
                                     n_folds_tune, n_jobs_cv, search_mode, n_iter_randomized_search)
             pi_tune_res = _dml_tune(s, dx, train_inds,
                                     self._learner['ml_pi'], param_grids['ml_pi'], scoring_methods['ml_pi'],
@@ -549,7 +549,9 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
 
         g_d0_best_params = [xx.best_params_ for xx in g_d0_tune_res]
         g_d1_best_params = [xx.best_params_ for xx in g_d1_tune_res]
-        pi_best_params = [xx.best_params_ for xx in pi_tune_ress]
+        if self._score == 'nonignorable':
+            pi_tune_res = pi_tune_ress
+        pi_best_params = [xx.best_params_ for xx in pi_tune_res]
         m_best_params = [xx.best_params_ for xx in m_tune_res]
 
         params = {'ml_g_d0': g_d0_best_params,
