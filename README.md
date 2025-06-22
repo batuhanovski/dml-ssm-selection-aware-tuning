@@ -67,7 +67,7 @@ The codebase includes all simulation and analysis tools used in the thesis.
 │   │   ├── helpers.py                   # Helper functions
 │   │   ├── main.py                      # Main simulation entry point
 │   │   ├── oracle_functions.py          # Oracle-related functions
-│   ├── ssm.py                           # Custom DoubleML SSM implementation
+│   ├── custom_ssm.py                    # Custom DoubleML SSM implementation
 └── ...                                  # Other files and folders
 ```
 
