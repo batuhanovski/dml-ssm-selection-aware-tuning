@@ -2,7 +2,7 @@
 
 This repository accompanies the Master Thesis in Economics at Ludwig-Maximilians-Universität München (LMU Munich), conducted at the Department of Economics. The thesis investigates hyperparameter tuning in Double Machine Learning (DML) for Sample Selection Models (SSMs), with a focus on improving Average Treatment Effect (ATE) estimation under Missing Not at Random (MNAR) settings.
 
-Special thanks to Prof. Tomasz Olma for his supervision and guidance throughout this work.
+Special thanks to Dr. Tomasz Olma for his supervision and guidance throughout this work.
 
 ---
 
