@@ -17,7 +17,8 @@ Special thanks to Prof. Tomasz Olma for his supervision and guidance throughout 
   - [Simulations (Main Study)](#1-simulations-main-study)
   - [Analysis Selection-Aware Tuning](#2-analysis-selection-aware-tuning)
   - [Analysis Study Comparison](#3-analysis-study-comparison)
-  - [Real-Life Data Study](#4-real-life-data-study)
+  - [Analysis Separation of Nuisance Function G](#4-analysis-separation-of-g)
+  - [Real-Life Data Study](#5-real-life-data-study)
 - [Contact](#contact)
 
 ---
@@ -145,7 +146,14 @@ This directory evaluates full-sample and on-folds tuning methods using custom `s
 2. Open `analysis.ipynb` to explore the comparative study.
 3. Results and analysis notebooks for full-sample and on-folds tuning are stored in `results_fs/` and `results_of/` directories, respectively.
 
-### 4. Real Life Data Study
+### 4. Analysis Separation of G
+
+This directory compares the results of the models, separating and not separating the nuisance function g while tuning. 
+
+1. Navigate to `src/analysis_separation_g/`.
+2. Open `separation.ipynb` to explore the comparative study.
+
+### 5. Real Life Data Study
 
 The `real_life_study` directory contains Jupyter notebooks and data files for analyzing real-life scenarios. This study is divided into academic and vocational analyses.
 
