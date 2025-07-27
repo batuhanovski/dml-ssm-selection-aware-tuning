@@ -427,7 +427,7 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
                                'ml_m': 'neg_log_loss'}
 
         if self._score == 'nonignorable':
-            ### WRITE MY IMPLEMENTATION HERE
+
             train_inds = [train_index for (train_index, _) in smpls]
 
             # INNER TRAIN INDICES
