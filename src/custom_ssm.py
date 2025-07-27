@@ -430,7 +430,9 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
 
             train_inds = [train_index for (train_index, _) in smpls]
 
-            # INNER TRAIN INDICES
+            # INNER TRAIN INDICES for splitting the training set into two parts
+            # Part 1 will be used for tuning the nuisance function pi
+            # Part 2 will be used for tuning the nuisance function m and g using the outputs of tuned pi
             def get_inner_train_inds(train_inds, d, s, random_state=42):
                 inner_train0_inds = []
                 inner_train1_inds = []
@@ -453,9 +455,11 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
                 return inner_train0_inds, inner_train1_inds
 
             inner_train0_inds, inner_train1_inds = get_inner_train_inds(train_inds, d, s)
-            #print('inner_train0_inds: ', inner_train0_inds)
 
-            # for g 
+            # For G, we need to filter inner_train1_inds by d and s
+            # to ensure that we have the correct treatment and control groups
+            # for each inner fold.
+            # This is necessary because we are estimating two separate models for d=0 and d=1.
             def filter_inner1_by_ds(inner_train1_inds, d, s):
                 inner1_d0_s1 = []
                 inner1_d1_s1 = []
@@ -476,7 +480,10 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
 
             x_d_z = np.concatenate([x, d.reshape(-1, 1), z.reshape(-1, 1)], axis=1)
 
-            # PI (ml_pi)
+            # PI (ml_pi) 
+            # Tuning and getting predictions for pi for the other inner fold
+            # inner0 will be used for tuning pi
+            # inner1 will be used for predicting pi_hats
             pi_hat_list = []
             pi_tune_ress = []
 
@@ -507,6 +514,7 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
                 pi_hat_full[inner1] = pi_hat
 
             # M (ml_m)
+            # Concatenate x and pi_hats coming from tuned ml_pi for tuning m
             x_pi = np.concatenate([x, pi_hat_full.reshape(-1, 1)], axis=1)
 
             m_tune_res = _dml_tune(d, x_pi, inner_train1_inds,
@@ -514,6 +522,7 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
                                 n_folds_tune, n_jobs_cv, search_mode, n_iter_randomized_search)
 
             # G (ml_g)
+            # Concatenate x, d and pi_hats coming from tuned ml_pi for tuning g
             x_pi_d = np.concatenate([x, d.reshape(-1,1), pi_hat_full.reshape(-1, 1)], axis=1)
 
 
@@ -525,7 +534,8 @@ class DoubleMLSSM(LinearScoreMixin, DoubleML):
                                     n_folds_tune, n_jobs_cv, search_mode, n_iter_randomized_search)
             
         else:
-
+            
+            # MAR case (same as before)
             # nuisance training sets conditional on d
             _, smpls_d0_s1, _, smpls_d1_s1 = _get_cond_smpls_2d(smpls, d, s)
             train_inds = [train_index for (train_index, _) in smpls]
